@@ -157,7 +157,9 @@ function joinWav(bufs){const pcm=bufs.map(b=>new Uint8Array(b).slice(44));const 
 async function gen3(){const t=$('tx3').value.trim();if(!t){$('m3').textContent='पहले टेक्स्ट लिखें।';return}
  $('a3').pause();$('a3').hidden=true;$('d3').style.display='none';$('g3').disabled=true;
  const isG=SEL[0]=='g',parts=chunks(t,isG?900:1400);let FB=0;const bufs=[];
- try{for(let k=0;k<parts.length;k++){$('m3').textContent='बन रहा है… '+(parts.length>1?'(भाग '+(k+1)+'/'+parts.length+') ':'')+(isG?'⭐ में थोड़ा समय लगता है':'');let r;
+ try{if(!isG){let done=0;const o=SEL[0]=='p'?SEL[5]:{v:SEL[1],p:0,r:0};const one=async k=>{for(let a=0;a<3;a++){const r=await fetch(API+'/tts',J({text:parts[k],voice:o.v,pitch:(+o.p)+(+$('pitch3').value),rate:(+o.r)+(+$('rate3').value),volume:$('vol3').value}));if(r.ok){bufs[k]=await r.arrayBuffer();$('m3').textContent='बन रहा है… '+(++done)+'/'+parts.length;return}}throw 0};
+  let nx=0;await Promise.all([0,1,2,3].map(async()=>{while(nx<parts.length)await one(nx++)}))}
+ else for(let k=0;k<parts.length;k++){$('m3').textContent='बन रहा है… '+(parts.length>1?'(भाग '+(k+1)+'/'+parts.length+') ':'')+(isG?'⭐ में थोड़ा समय लगता है':'');let r;
   if(isG&&!FB){r=await fetch(API+'/gemini',J({text:parts[k],voice:SEL[1],style:$('gs').value}));if(!r.ok&&k==0)FB=1;else if(!r.ok)throw 0}
   if(!isG||FB){let o;if(SEL[0]=='p')o=SEL[5];else if(isG)o={v:L3.startsWith('hi')?(SEL[3]=='F'?'hi-IN-SwaraNeural':'hi-IN-MadhurNeural'):(SEL[3]=='F'?'en-US-AvaMultilingualNeural':'en-US-AndrewMultilingualNeural'),p:0,r:0};else o={v:SEL[1],p:0,r:0};
    r=await fetch(API+'/tts',J({text:parts[k],voice:o.v,pitch:(+o.p)+(+$('pitch3').value),rate:(+o.r)+(+$('rate3').value),volume:$('vol3').value}))}
