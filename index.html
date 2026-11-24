@@ -29,7 +29,7 @@ audio{width:100%;margin-top:12px}.dl{display:none;margin-top:8px;text-align:cent
 .vc b{font-size:14px;display:block}.vc span{font-size:11px;color:#6b6280}
 .tag{font-size:10px;padding:1px 6px;border-radius:8px;background:#fde7f3;color:var(--b);margin-left:4px}
 </style></head><body>
-<header><h1>🎙️ आवाज़</h1><p>47 हिंदी आवाज़ें सुनकर चुनें · 100+ भाषाएँ · डाउनलोड · सोनू की आवाज़</p></header>
+<header><h1>🎙️ आवाज़</h1><p>140+ भाषाएँ · 500+ आवाज़ें सुनकर चुनें · मुफ़्त डाउनलोड · सोनू की आवाज़</p></header>
 <main>
 <div class="tabs"><button id="tb3" class="on" onclick="tab(3)">🔊 आवाज़ें (140+ भाषाएँ)</button><button id="tb2" onclick="tab(2)">🧑 सोनू</button></div>
 
@@ -50,9 +50,9 @@ audio{width:100%;margin-top:12px}.dl{display:none;margin-top:8px;text-align:cent
 <div class="vg" id="vg"></div>
 <p class="small">⚡ असीमित = तुरंत और बिना सीमा। ⭐ भावपूर्ण = सबसे इंसानी, पर रोज़ की मुफ़्त सीमा है।</p>
 <label>3. टेक्स्ट लिखें</label>
-<textarea id="tx3" maxlength="3000" placeholder="यहाँ टेक्स्ट लिखें या पेस्ट करें…"></textarea><div class="cnt"><span id="n3">0</span> / 3000</div>
+<textarea id="tx3" maxlength="3000" placeholder="यहाँ टेक्स्ट लिखें या पेस्ट करें…"></textarea><div class="cnt"><a href="#" onclick="$('tx3').value='';$('n3').textContent=0;return false" style="float:left;color:#b91c1c">✖ मिटाएँ</a><span id="n3">0</span> / 3000</div>
 <div id="gopt"><label>अंदाज़ (⭐ आवाज़ों के लिए)</label><select id="gs"><option value="">सामान्य</option><option value="Read in Hindi like a calm devotional storyteller, with warmth and pauses">कथा/भक्ति</option><option value="Read cheerfully and energetically">खुशी से</option><option value="Read slowly and softly">धीरे, नरमी से</option><option value="Read like a news anchor, clear and confident">न्यूज़ एंकर</option><option value="Read like a teacher explaining to students, clear and friendly">टीचर</option><option value="Read with a sad, emotional tone">भावुक</option><option value="Read like an excited YouTuber">यूट्यूबर</option></select></div>
-<div id="eopt"><label>रफ़्तार: <span id="rv3">0</span>%</label><input type="range" id="rate3" min="-40" max="40" value="0"></div>
+<div id="eopt"><div class="row"><div><label>रफ़्तार: <span id="rv3">0</span>%</label><input type="range" id="rate3" min="-50" max="50" value="0"></div><div><label>पिच: <span id="pv3">0</span></label><input type="range" id="pitch3" min="-30" max="30" value="0"></div></div><label>आवाज़ तेज़: <span id="vv3">0</span>%</label><input type="range" id="vol3" min="-50" max="50" value="0"></div>
 <button class="go" id="g3" onclick="gen3()">ऑडियो बनाएँ</button>
 <div class="msg" id="m3"></div><audio id="a3" controls hidden></audio><a class="dl" id="d3" download="awaaz.mp3">⬇️ डाउनलोड</a>
 </div></section>
@@ -70,7 +70,7 @@ audio{width:100%;margin-top:12px}.dl{display:none;margin-top:8px;text-align:cent
 const API="https://sonu-awaaz.vercel.app/api";
 const J=o=>({method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)});
 const $=i=>document.getElementById(i);
-function tab(n){[1,2,3].forEach(i=>{$('t'+i).hidden=n!=i;$('tb'+i).className=n==i?'on':''})}
+function tab(n){[1,2,3].forEach(i=>{const t=$('t'+i),b=$('tb'+i);if(t)t.hidden=n!=i;if(b)b.className=n==i?'on':''})}
 $('tx').oninput=()=>$('n').textContent=$('tx').value.length;$('tx2').oninput=()=>$('n2').textContent=$('tx2').value.length;
 ['rate','pitch','vol'].forEach((k,i)=>$(k).oninput=()=>$(['rv','pv','vv'][i]).textContent=$(k).value);
 const LN={hi:'हिंदी',en:'English',bn:'বাংলা',ta:'தமிழ்',te:'తెలుగు',mr:'मराठी',gu:'ગુજરાતી',kn:'ಕನ್ನಡ',ml:'മലയാളം',ur:'اردو',pa:'ਪੰਜਾਬੀ',ne:'नेपाली'};
@@ -105,44 +105,44 @@ const HV=[
 ['g','Kore','कोमल','F','मज़बूत, भरोसेमंद'],['g','Zephyr','ज़ोया','F','चमकदार'],['g','Leda','लता','F','युवा'],['g','Aoede','आरती','F','हल्की, सुकूनभरी'],['g','Callirrhoe','काव्या','F','सहज'],['g','Autonoe','अनु','F','साफ़'],['g','Despina','दीपा','F','मधुर'],['g','Erinome','ऋतु','F','स्पष्ट'],['g','Laomedeia','लावण्या','F','उत्साही'],['g','Achernar','अर्चना','F','कोमल'],['g','Gacrux','गायत्री','F','परिपक्व'],['g','Pulcherrima','पल्लवी','F','आत्मविश्वासी'],['g','Vindemiatrix','वंदना','F','शांत'],['g','Sulafat','सुलोचना','F','गर्मजोशी भरी'],
 ['g','Puck','प्रकाश','M','जोशीला'],['g','Charon','चिराग','M','गहरी, जानकार'],['g','Fenrir','फ़रहान','M','उत्साही'],['g','Orus','ओम','M','दृढ़'],['g','Enceladus','ईशान','M','धीमी, साँसभरी'],['g','Iapetus','इंदर','M','साफ़'],['g','Umbriel','उमेश','M','सहज'],['g','Algieba','अजय','M','नरम'],['g','Algenib','अर्जुन','M','भारी'],['g','Rasalgethi','राजेश','M','ज्ञानी'],['g','Alnilam','अनिल','M','दमदार'],['g','Schedar','शेखर','M','संतुलित'],['g','Achird','अमित','M','दोस्ताना'],['g','Zubenelgenubi','ज़ुबैर','M','आम बोलचाल'],['g','Sadachbia','सचिन','M','जीवंत'],['g','Sadaltager','सागर','M','समझदार']];
 const SS={hi:'नमस्ते! सुनिए मेरी आवाज़, कैसी लगी?',en:'Hello! This is my voice. How does it sound?',bn:'নমস্কার! এটা আমার কণ্ঠ, কেমন লাগছে?',ta:'வணக்கம்! இது என் குரல், எப்படி இருக்கிறது?',te:'నమస్కారం! ఇది నా స్వరం, ఎలా ఉంది?',mr:'नमस्कार! हा माझा आवाज आहे, कसा वाटला?',gu:'નમસ્તે! આ મારો અવાજ છે, કેવો લાગ્યો?',kn:'ನಮಸ್ಕಾರ! ಇದು ನನ್ನ ಧ್ವನಿ, ಹೇಗಿದೆ?',ml:'നമസ്കാരം! ഇത് എന്റെ ശബ്ദമാണ്, എങ്ങനെയുണ്ട്?',ur:'السلام علیکم! یہ میری آواز ہے، کیسی لگی؟',pa:'ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਇਹ ਮੇਰੀ ਆਵਾਜ਼ ਹੈ, ਕਿਵੇਂ ਲੱਗੀ?',ne:'नमस्ते! यो मेरो आवाज हो, कस्तो लाग्यो?',or:'ନମସ୍କାର! ଏହା ମୋର ସ୍ୱର।',as:'নমস্কাৰ! এয়া মোৰ মাত।',es:'¡Hola! Esta es mi voz, ¿qué te parece?',fr:'Bonjour ! Voici ma voix, comment la trouvez-vous ?',de:'Hallo! Das ist meine Stimme. Wie klingt sie?',it:'Ciao! Questa è la mia voce, ti piace?',pt:'Olá! Esta é a minha voz, o que acha?',ru:'Привет! Это мой голос. Как он звучит?',ar:'مرحبا! هذا صوتي، ما رأيك؟',zh:'你好！这是我的声音，听起来怎么样？',ja:'こんにちは！これは私の声です。いかがですか？',ko:'안녕하세요! 제 목소리예요. 어떠세요?',tr:'Merhaba! Bu benim sesim, nasıl buldun?',id:'Halo! Ini suara saya, bagaimana menurutmu?',ms:'Helo! Ini suara saya.',th:'สวัสดี! นี่คือเสียงของฉัน',vi:'Xin chào! Đây là giọng nói của tôi.',fa:'سلام! این صدای من است.',nl:'Hallo! Dit is mijn stem.',pl:'Cześć! To jest mój głos.',uk:'Привіт! Це мій голос.',si:'ආයුබෝවන්! මේ මගේ හඬයි.',my:'မင်္ဂလာပါ! ဒါကကျွန်ုပ်ရဲ့အသံပါ။',km:'សួស្តី! នេះជាសំឡេងរបស់ខ្ញុំ។',sw:'Habari! Hii ni sauti yangu.',he:'שלום! זה הקול שלי.',el:'Γεια σας! Αυτή είναι η φωνή μου.',sv:'Hej! Det här är min röst.',ro:'Bună! Aceasta este vocea mea.',hu:'Szia! Ez az én hangom.',cs:'Ahoj! To je můj hlas.',fil:'Kumusta! Ito ang aking boses.'};
-const TG={Friendly:'दोस्ताना',Positive:'सकारात्मक',Warm:'गर्मजोशी',Pleasant:'सुहानी',Caring:'परवाह भरी',Confident:'आत्मविश्वासी',Comfort:'सुकूनभरी',Expressive:'भावपूर्ण',Lively:'जीवंत',Passion:'जोशीली',Authentic:'असली',Honest:'सच्ची',Rational:'संतुलित',Considerate:'विचारशील',Cute:'प्यारी',Reliable:'भरोसेमंद',Approachable:'सहज',Casual:'बोलचाल',Sincere:'सच्ची',Upbeat:'उत्साही',Clear:'साफ़',Conversational:'बातचीत वाली',Calm:'शांत',Bright:'चमकदार',Soft:'नरम',Gentle:'कोमल'};
-let EV=[],L3='hi-IN',SEL=null,F='all';const PA=new Audio(),PC={};
+const TG={Friendly:'दोस्ताना',Positive:'सकारात्मक',Warm:'गर्मजोशी',Pleasant:'सुहानी',Caring:'परवाह भरी',Confident:'आत्मविश्वासी',Comfort:'सुकूनभरी',Expressive:'भावपूर्ण',Lively:'जीवंत',Passion:'जोशीली',Authentic:'असली',Honest:'सच्ची',Rational:'संतुलित',Considerate:'विचारशील',Cute:'प्यारी',Reliable:'भरोसेमंद',Approachable:'सहज',Casual:'बोलचाल',Sincere:'सच्ची',Upbeat:'उत्साही',Clear:'साफ़',Conversational:'बातचीत वाली',Calm:'शांत',Bright:'चमकदार',Soft:'नरम',Gentle:'कोमल',Cheerful:'खुशमिज़ाज',Authority:'रौबदार',Professional:'पेशेवर',Engaging:'दिलचस्प',Energetic:'ऊर्जावान',Deep:'गहरी',Sweet:'मीठी',Well:'संतुलित','Well-Rounded':'संतुलित',Animated:'चुलबुली',Thoughtful:'विचारशील',Empathetic:'हमदर्द',Serious:'गंभीर',Optimistic:'आशावादी',Crisp:'कुरकुरी',Youthful:'युवा',Mature:'परिपक्व',Hopeful:'आशावादी',Strong:'मज़बूत',Smooth:'मुलायम',Natural:'प्राकृतिक',Polite:'विनम्र',Determined:'दृढ़',Humorous:'मज़ाकिया'};
+let EV=[],L3='hi-IN',SEL=null,F='all';const PA=new Audio(),PC={};let PI=-1;PA.onended=PA.onpause=()=>{const b=$('pb'+PI);if(b)b.textContent='▶';PI=-1};function playP(i,src){PA.src=src;PA.play();PI=i;const b=$('pb'+i);if(b)b.textContent='⏸'}
 function smp(v){return 'samples/'+(v[0]=='g'?'g_':v[0]=='p'?'p_':'e_')+v[1]+'.mp3'}
 function vname(id){return id.split('-').slice(2).join('-').replace('MultilingualNeural','').replace('ExpressiveNeural',' Expressive').replace('Neural','')}
 function list3(){const lang=L3.split('-')[0];let out=[];
  const own=EV.filter(v=>v.locale==L3&&!/Multilingual/.test(v.id));
- own.forEach(v=>{const hv=HV.find(h=>h[1]==v.id);out.push(hv||['e',v.id,vname(v.id),v.gender[0],(v.tags||[]).map(t=>TG[t]||t).join(', ')||'प्राकृतिक'])});
+ own.forEach(v=>{const hv=HV.find(h=>h[1]==v.id);out.push(hv||['e',v.id,vname(v.id),v.gender[0],(v.tags||[]).map(t=>TG[t]).filter(Boolean).join(', ')||'प्राकृतिक'])});
  if(lang=='hi')out=out.concat(HV.filter(h=>h[0]=='p'));
- EV.filter(v=>/Multilingual/.test(v.id)&&!(v.locale==L3)).forEach(v=>{const hv=lang=='hi'&&HV.find(h=>h[1]==v.id);out.push(hv?[...hv,null,'m']:['e',v.id,vname(v.id),v.gender[0],'🌐 '+((v.tags||[]).map(t=>TG[t]||t).join(', ')||'बहुभाषी'),null,'m'])});
+ EV.filter(v=>/Multilingual/.test(v.id)&&!(v.locale==L3)).forEach(v=>{const hv=lang=='hi'&&HV.find(h=>h[1]==v.id);out.push(hv?[...hv,null,'m']:['e',v.id,vname(v.id),v.gender[0],'🌐 '+((v.tags||[]).map(t=>TG[t]).filter(Boolean).join(', ')||'बहुभाषी'),null,'m'])});
  out=out.concat(HV.filter(h=>h[0]=='g'));return out}
 let CUR=[];
 function drawV(){CUR=list3();if(!SEL||!CUR.includes(SEL))SEL=CUR[0];
  const sh=CUR.map((v,i)=>[v,i]).filter(([v])=>F=='all'||v[3]==F||(F=='g'&&v[0]=='g')||(F=='e'&&v[0]!='g')||(F=='m'&&v[6]=='m'));
  $('vcount').textContent=sh.length+' आवाज़ें';
- $('vg').innerHTML=sh.map(([v,i])=>`<div class="vc ${v==SEL?'sel':''}" onclick="pick(${i})"><button class="pl" id="pb${i}" onclick="event.stopPropagation();pv(${i})">▶</button><div><b>${v[2]} ${v[3]=='F'?'👩':'👨'}${v[0]=='g'?'<i class=tag>⭐</i>':''}</b><span>${v[4]}</span></div></div>`).join('');
+ $('vg').innerHTML=sh.map(([v,i])=>`<div class="vc ${v==SEL?'sel':''}" onclick="pick(${i})"><button class="pl" id="pb${i}" onclick="event.stopPropagation();pv(${i})">${i==PI?'⏸':'▶'}</button><div><b>${v[2]} ${v[3]=='F'?'👩':'👨'}${v[0]=='g'?'<i class=tag>⭐</i>':''}</b><span>${v[4]}</span></div></div>`).join('');
  $('gopt').style.display=SEL[0]=='g'?'':'none';$('eopt').style.display=SEL[0]=='g'?'none':''}
 function fv(f,b){F=f;document.querySelectorAll('.flt button').forEach(x=>x.className='');b.className='on';drawV()}
 function pick(i){SEL=CUR[i];drawV()}
-async function pv(i){const v=CUR[i];pick(i);const lang=L3.split('-')[0];
- if(lang=='hi'&&(v[0]!='e'||HV.find(h=>h[1]==v[1]))){PA.src=smp(v);return PA.play()}
+async function pv(i){if(PI==i){PA.pause();return}const v=CUR[i];pick(i);const lang=L3.split('-')[0];
+ if(lang=='hi'&&(v[0]!='e'||HV.find(h=>h[1]==v[1]))){return playP(i,smp(v))}
  const k=L3+'|'+v[1];const b=$('pb'+i);
  if(!PC[k]){if(b)b.textContent='…';try{const t=SS[lang]||SS.en;
   const r=v[0]=='g'?await fetch(API+'/gemini',J({text:t,voice:v[1]})):await fetch(API+'/tts',J({text:t,voice:v[1]}));
   if(!r.ok)throw 0;PC[k]=URL.createObjectURL(await r.blob())}catch(e){if(b)b.textContent='▶';return alert('नमूना नहीं बन पाया, दोबारा दबाएँ।')}}
- const b2=$('pb'+i);if(b2)b2.textContent='▶';PA.src=PC[k];PA.play()}
+ playP(i,PC[k])}
 async function init3(){try{EV=await (await fetch(API+'/voices')).json()}catch(e){EV=[]}
  const locs=[...new Set(EV.map(v=>v.locale))];const dn=new Intl.DisplayNames(['hi'],{type:'language'});
- const nm=l=>{try{return dn.of(l)}catch(e){return l}};
+ const IU={'iu-Cans-CA':'इनुक्टिटुट (सिलेबिक)','iu-Latn-CA':'इनुक्टिटुट (लैटिन)'};const nm=l=>{if(IU[l])return IU[l];try{return dn.of(l)}catch(e){return l}};
  locs.sort((a,b)=>(b=='hi-IN')-(a=='hi-IN')||(b.endsWith('-IN'))-(a.endsWith('-IN'))||nm(a).localeCompare(nm(b),'hi'));
  $('lg3').innerHTML=locs.map(l=>`<option value="${l}">${nm(l)} (${l})</option>`).join('');$('lg3').value='hi-IN';drawV()}
 $('lg3').onchange=()=>{L3=$('lg3').value;SEL=null;drawV()};
-$('rate3').oninput=()=>$('rv3').textContent=$('rate3').value;
+$('rate3').oninput=()=>$('rv3').textContent=$('rate3').value;$('pitch3').oninput=()=>$('pv3').textContent=$('pitch3').value;$('vol3').oninput=()=>$('vv3').textContent=$('vol3').value;
 $('tx3').oninput=()=>$('n3').textContent=$('tx3').value.length;init3();
 async function gen3(){const t=$('tx3').value.trim();if(!t){$('m3').textContent='पहले टेक्स्ट लिखें।';return}
- $('g3').disabled=true;$('m3').textContent=SEL[0]=='g'?'बन रहा है… (10–40 सेकंड)':'बन रहा है…';
+ $('a3').pause();$('a3').hidden=true;$('d3').style.display='none';$('g3').disabled=true;$('m3').textContent=SEL[0]=='g'?'बन रहा है… (10–40 सेकंड)':'बन रहा है…';
  try{let r;
  if(SEL[0]=='g'){r=await fetch(API+'/gemini',J({text:t,voice:SEL[1],style:$('gs').value}));$('d3').download='awaaz-'+SEL[1]+'.wav'}
- else{const o=SEL[0]=='p'?SEL[5]:{v:SEL[1],p:0,r:0};r=await fetch(API+'/tts',J({text:t,voice:o.v,pitch:o.p,rate:(+o.r)+(+$('rate3').value)}));$('d3').download='awaaz.mp3'}
+ else{const o=SEL[0]=='p'?SEL[5]:{v:SEL[1],p:0,r:0};r=await fetch(API+'/tts',J({text:t,voice:o.v,pitch:(+o.p)+(+$('pitch3').value),rate:(+o.r)+(+$('rate3').value),volume:$('vol3').value}));$('d3').download='awaaz.mp3'}
  if(!r.ok)throw 0;const u=URL.createObjectURL(await r.blob());
  $('a3').src=u;$('a3').hidden=false;$('a3').play();$('d3').href=u;$('d3').style.display='block';$('m3').textContent='✅ तैयार'}
  catch(e){$('m3').innerHTML='<span class="err">'+(SEL[0]=='g'?'आज की ⭐ मुफ़्त सीमा पूरी या सर्वर व्यस्त। कोई ⚡ आवाज़ चुनें।':'गड़बड़ हुई, दोबारा दबाएँ।')+'</span>'}$('g3').disabled=false}
