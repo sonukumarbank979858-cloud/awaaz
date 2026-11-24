@@ -28,6 +28,16 @@ audio{width:100%;margin-top:12px}.dl{display:none;margin-top:8px;text-align:cent
 .vc.sel{border-color:var(--a);background:#f5f0ff}.vc .pl{border:0;border-radius:50%;width:38px;height:38px;min-width:38px;background:var(--a);color:#fff;font-size:15px}
 .vc b{font-size:14px;display:block}.vc span{font-size:11px;color:#6b6280}
 .tag{font-size:10px;padding:1px 6px;border-radius:8px;background:#fde7f3;color:var(--b);margin-left:4px}
+.vsel{position:relative}.vbtn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid #ddd;border-radius:10px;background:#fff;font-size:16px;font-family:inherit;color:var(--c)}
+.vbtn .av,.vc .av{width:34px;height:34px;min-width:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;margin-right:10px;vertical-align:middle}
+#vcur{display:flex;align-items:center}.car{font-size:20px;color:#888}
+.vpop{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:20;background:#fff;border:1px solid #ddd;border-radius:14px;box-shadow:0 8px 30px #0003;padding:8px}
+.vpop #vq{width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;font-size:16px;margin-bottom:6px}
+.vpop .flt{flex-wrap:nowrap;overflow-x:auto;margin:0 0 6px}.vpop .flt button{white-space:nowrap;padding:6px 10px;font-size:13px}
+.vg{display:block!important;max-height:52vh!important;overflow:auto}
+.vc{border:0!important;border-bottom:1px solid #f0f0f0!important;border-radius:8px!important;padding:8px 4px!important;cursor:pointer}
+.vc>div{flex:1}.vc .pl{order:3;background:none!important;color:var(--a)!important;border:2px solid var(--a)!important}
+.set{margin-top:10px;border:1px solid #ddd;border-radius:10px;padding:8px 12px}.set summary{font-weight:600;cursor:pointer}
 </style></head><body>
 <header><h1>🎙️ आवाज़</h1><p>140+ भाषाएँ · 500+ आवाज़ें सुनकर चुनें · मुफ़्त डाउनलोड · सोनू की आवाज़</p></header>
 <main>
@@ -44,15 +54,15 @@ audio{width:100%;margin-top:12px}.dl{display:none;margin-top:8px;text-align:cent
 </div></section>
 
 <section id="t3"><div class="card">
-<label>1. भाषा चुनें</label><select id="lg3"></select>
-<label>2. आवाज़ चुनें (▶ दबाकर सुनें) · <span id="vcount"></span></label>
-<div class="flt"><button class="on" onclick="fv('all',this)">सभी</button><button onclick="fv('F',this)">👩 महिला</button><button onclick="fv('M',this)">👨 पुरुष</button><button onclick="fv('g',this)">⭐ भावपूर्ण</button><button onclick="fv('e',this)">⚡ असीमित</button><button onclick="fv('m',this)">🌐 बहुभाषी</button></div>
-<div class="vg" id="vg"></div>
-<p class="small">⚡ असीमित = तुरंत और बिना सीमा। ⭐ भावपूर्ण = सबसे इंसानी, पर रोज़ की मुफ़्त सीमा है।</p>
-<label>3. टेक्स्ट लिखें</label>
 <textarea id="tx3" maxlength="3000" placeholder="यहाँ टेक्स्ट लिखें या पेस्ट करें…"></textarea><div class="cnt"><a href="#" onclick="$('tx3').value='';$('n3').textContent=0;return false" style="float:left;color:#b91c1c">✖ मिटाएँ</a><span id="n3">0</span> / 3000</div>
-<div id="gopt"><label>अंदाज़ (⭐ आवाज़ों के लिए)</label><select id="gs"><option value="">सामान्य</option><option value="Read in Hindi like a calm devotional storyteller, with warmth and pauses">कथा/भक्ति</option><option value="Read cheerfully and energetically">खुशी से</option><option value="Read slowly and softly">धीरे, नरमी से</option><option value="Read like a news anchor, clear and confident">न्यूज़ एंकर</option><option value="Read like a teacher explaining to students, clear and friendly">टीचर</option><option value="Read with a sad, emotional tone">भावुक</option><option value="Read like an excited YouTuber">यूट्यूबर</option></select></div>
-<div id="eopt"><div class="row"><div><label>रफ़्तार: <span id="rv3">0</span>%</label><input type="range" id="rate3" min="-50" max="50" value="0"></div><div><label>पिच: <span id="pv3">0</span></label><input type="range" id="pitch3" min="-30" max="30" value="0"></div></div><label>आवाज़ तेज़: <span id="vv3">0</span>%</label><input type="range" id="vol3" min="-50" max="50" value="0"></div>
+<label>भाषा</label><select id="lg3"></select>
+<label>आवाज़ · <span id="vcount"></span></label>
+<div class="vsel"><button type="button" class="vbtn" id="vbtn" onclick="tgV()"><span id="vcur"></span><span class="car">⌄</span></button>
+<div class="vpop" id="vpop" hidden><input id="vq" placeholder="🔍 आवाज़ खोजें…" oninput="drawV()">
+<div class="flt"><button class="on" onclick="fv('all',this)">सभी</button><button onclick="fv('F',this)">👩 महिला</button><button onclick="fv('M',this)">👨 पुरुष</button><button onclick="fv('g',this)">⭐ भावपूर्ण</button><button onclick="fv('e',this)">⚡ असीमित</button><button onclick="fv('m',this)">🌐 बहुभाषी</button></div>
+<div class="vg" id="vg"></div></div></div>
+<details class="set"><summary>⚙️ आवाज़ सेटिंग</summary><div id="gopt"><label>अंदाज़ (⭐ आवाज़ों के लिए)</label><select id="gs"><option value="">सामान्य</option><option value="Read in Hindi like a calm devotional storyteller, with warmth and pauses">कथा/भक्ति</option><option value="Read cheerfully and energetically">खुशी से</option><option value="Read slowly and softly">धीरे, नरमी से</option><option value="Read like a news anchor, clear and confident">न्यूज़ एंकर</option><option value="Read like a teacher explaining to students, clear and friendly">टीचर</option><option value="Read with a sad, emotional tone">भावुक</option><option value="Read like an excited YouTuber">यूट्यूबर</option></select></div><div id="eopt"><div class="row"><div><label>रफ़्तार: <span id="rv3">0</span>%</label><input type="range" id="rate3" min="-50" max="50" value="0"></div><div><label>पिच: <span id="pv3">0</span></label><input type="range" id="pitch3" min="-30" max="30" value="0"></div></div><label>आवाज़ तेज़: <span id="vv3">0</span>%</label><input type="range" id="vol3" min="-50" max="50" value="0"></div></details>
+<p class="small">⚡ असीमित = तुरंत, बिना सीमा · ⭐ भावपूर्ण = सबसे इंसानी, रोज़ की मुफ़्त सीमा · 3,000 अक्षर प्रति बार</p>
 <button class="go" id="g3" onclick="gen3()">ऑडियो बनाएँ</button>
 <div class="msg" id="m3"></div><audio id="a3" controls hidden></audio><a class="dl" id="d3" download="awaaz.mp3">⬇️ डाउनलोड</a>
 </div></section>
@@ -117,12 +127,16 @@ function list3(){const lang=L3.split('-')[0];let out=[];
  out=out.concat(HV.filter(h=>h[0]=='g'));return out}
 let CUR=[];
 function drawV(){CUR=list3();if(!SEL||!CUR.includes(SEL))SEL=CUR[0];
- const sh=CUR.map((v,i)=>[v,i]).filter(([v])=>F=='all'||v[3]==F||(F=='g'&&v[0]=='g')||(F=='e'&&v[0]!='g')||(F=='m'&&v[6]=='m'));
+ const q=($('vq').value||'').trim().toLowerCase();const sh=CUR.map((v,i)=>[v,i]).filter(([v])=>(F=='all'||v[3]==F||(F=='g'&&v[0]=='g')||(F=='e'&&v[0]!='g')||(F=='m'&&v[6]=='m'))&&(!q||(v[2]+' '+v[4]+' '+v[1]).toLowerCase().includes(q)));
+ $('vcur').innerHTML=SEL?AV(SEL)+'<b>'+SEL[2]+'</b>&nbsp;'+(SEL[0]=='g'?'⭐':''):'';
  $('vcount').textContent=sh.length+' आवाज़ें';
- $('vg').innerHTML=sh.map(([v,i])=>`<div class="vc ${v==SEL?'sel':''}" onclick="pick(${i})"><button class="pl" id="pb${i}" onclick="event.stopPropagation();pv(${i})">${i==PI?'⏸':'▶'}</button><div><b>${v[2]} ${v[3]=='F'?'👩':'👨'}${v[0]=='g'?'<i class=tag>⭐</i>':''}</b><span>${v[4]}</span></div></div>`).join('');
+ $('vg').innerHTML=sh.map(([v,i])=>`<div class="vc ${v==SEL?'sel':''}" onclick="pick(${i},1)">${AV(v)}<button class="pl" id="pb${i}" onclick="event.stopPropagation();pv(${i})">${i==PI?'⏸':'▶'}</button><div><b>${v[2]} ${v[3]=='F'?'👩':'👨'}${v[0]=='g'?'<i class=tag>⭐</i>':''}</b><span>${v[4]}</span></div></div>`).join('');
  $('gopt').style.display=SEL[0]=='g'?'':'none';$('eopt').style.display=SEL[0]=='g'?'none':''}
 function fv(f,b){F=f;document.querySelectorAll('.flt button').forEach(x=>x.className='');b.className='on';drawV()}
-function pick(i){SEL=CUR[i];drawV()}
+function pick(i,c){SEL=CUR[i];if(c)$('vpop').hidden=true;drawV()}
+function AV(v){const c=v[3]=='F'?'#db2777':'#7c3aed';return `<span class=av style="background:${c}">${v[2][0]}</span>`}
+function tgV(){const p=$('vpop');p.hidden=!p.hidden;if(!p.hidden){$('vq').value='';drawV();const e=document.querySelector('.vc.sel');if(e)e.scrollIntoView({block:'nearest'})}}
+document.addEventListener('click',e=>{if(!e.target.closest('.vsel'))$('vpop').hidden=true});
 async function pv(i){if(PI==i){PA.pause();return}const v=CUR[i];pick(i);const lang=L3.split('-')[0];
  if(lang=='hi'&&(v[0]!='e'||HV.find(h=>h[1]==v[1]))){return playP(i,smp(v))}
  const k=L3+'|'+v[1];const b=$('pb'+i);
@@ -135,7 +149,7 @@ async function init3(){try{EV=await (await fetch(API+'/voices')).json()}catch(e)
  const IU={'iu-Cans-CA':'इनुक्टिटुट (सिलेबिक)','iu-Latn-CA':'इनुक्टिटुट (लैटिन)'};const nm=l=>{if(IU[l])return IU[l];try{return dn.of(l)}catch(e){return l}};
  locs.sort((a,b)=>(b=='hi-IN')-(a=='hi-IN')||(b.endsWith('-IN'))-(a.endsWith('-IN'))||nm(a).localeCompare(nm(b),'hi'));
  $('lg3').innerHTML=locs.map(l=>`<option value="${l}">${nm(l)} (${l})</option>`).join('');$('lg3').value='hi-IN';drawV()}
-$('lg3').onchange=()=>{L3=$('lg3').value;SEL=null;drawV()};
+$('lg3').onchange=()=>{L3=$('lg3').value;SEL=null;drawV();$('vpop').hidden=false};
 $('rate3').oninput=()=>$('rv3').textContent=$('rate3').value;$('pitch3').oninput=()=>$('pv3').textContent=$('pitch3').value;$('vol3').oninput=()=>$('vv3').textContent=$('vol3').value;
 $('tx3').oninput=()=>$('n3').textContent=$('tx3').value.length;init3();
 async function gen3(){const t=$('tx3').value.trim();if(!t){$('m3').textContent='पहले टेक्स्ट लिखें।';return}
