@@ -124,7 +124,7 @@ function list3(){const lang=L3.split('-')[0];let out=[];
  own.forEach(v=>{const hv=HV.find(h=>h[1]==v.id);out.push(hv||['e',v.id,vname(v.id),v.gender[0],(v.tags||[]).map(t=>TG[t]).filter(Boolean).join(', ')||'प्राकृतिक'])});
  if(lang=='hi')out=out.concat(HV.filter(h=>h[0]=='p'));
  EV.filter(v=>/Multilingual/.test(v.id)&&!(v.locale==L3)).forEach(v=>{const hv=lang=='hi'&&HV.find(h=>h[1]==v.id);out.push(hv?[...hv,null,'m']:['e',v.id,vname(v.id),v.gender[0],'🌐 '+((v.tags||[]).map(t=>TG[t]).filter(Boolean).join(', ')||'बहुभाषी'),null,'m'])});
- out=out.concat(HV.filter(h=>h[0]=='g'));return out}
+ const G=HV.filter(h=>h[0]=='g');return lang=='hi'?G.concat(out):out.concat(G)}
 let CUR=[];
 function drawV(){CUR=list3();if(!SEL||!CUR.includes(SEL))SEL=CUR[0];
  const q=($('vq').value||'').trim().toLowerCase();const sh=CUR.map((v,i)=>[v,i]).filter(([v])=>(F=='all'||v[3]==F||(F=='g'&&v[0]=='g')||(F=='e'&&v[0]!='g')||(F=='m'&&v[6]=='m'))&&(!q||(v[2]+' '+v[4]+' '+v[1]).toLowerCase().includes(q)));
@@ -154,11 +154,11 @@ $('rate3').oninput=()=>$('rv3').textContent=$('rate3').value;$('pitch3').oninput
 $('tx3').oninput=()=>$('n3').textContent=$('tx3').value.length;init3();
 async function gen3(){const t=$('tx3').value.trim();if(!t){$('m3').textContent='पहले टेक्स्ट लिखें।';return}
  $('a3').pause();$('a3').hidden=true;$('d3').style.display='none';$('g3').disabled=true;$('m3').textContent=SEL[0]=='g'?'बन रहा है… (10–40 सेकंड)':'बन रहा है…';
- try{let r;
- if(SEL[0]=='g'){r=await fetch(API+'/gemini',J({text:t,voice:SEL[1],style:$('gs').value}));$('d3').download='awaaz-'+SEL[1]+'.wav'}
+ let FB=0;try{let r;
+ if(SEL[0]=='g'){r=await fetch(API+'/gemini',J({text:t,voice:SEL[1],style:$('gs').value}));$('d3').download='awaaz-'+SEL[1]+'.wav';if(!r.ok){FB=1;const fv=L3.startsWith('hi')?(SEL[3]=='F'?'hi-IN-SwaraNeural':'hi-IN-MadhurNeural'):(SEL[3]=='F'?'en-US-AvaMultilingualNeural':'en-US-AndrewMultilingualNeural');r=await fetch(API+'/tts',J({text:t,voice:fv}));$('d3').download='awaaz.mp3'}}
  else{const o=SEL[0]=='p'?SEL[5]:{v:SEL[1],p:0,r:0};r=await fetch(API+'/tts',J({text:t,voice:o.v,pitch:(+o.p)+(+$('pitch3').value),rate:(+o.r)+(+$('rate3').value),volume:$('vol3').value}));$('d3').download='awaaz.mp3'}
  if(!r.ok)throw 0;const u=URL.createObjectURL(await r.blob());
- $('a3').src=u;$('a3').hidden=false;$('a3').play();$('d3').href=u;$('d3').style.display='block';$('m3').textContent='✅ तैयार'}
+ $('a3').src=u;$('a3').hidden=false;$('a3').play();$('d3').href=u;$('d3').style.display='block';$('m3').textContent=FB?'✅ तैयार (⭐ की आज की सीमा पूरी, ⚡ आवाज़ से बनाया)':'✅ तैयार'}
  catch(e){$('m3').innerHTML='<span class="err">'+(SEL[0]=='g'?'आज की ⭐ मुफ़्त सीमा पूरी या सर्वर व्यस्त। कोई ⚡ आवाज़ चुनें।':'गड़बड़ हुई, दोबारा दबाएँ।')+'</span>'}$('g3').disabled=false}
 loadVoices();
 </script></body></html>
