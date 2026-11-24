@@ -1,0 +1,96 @@
+<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>आवाज़ · मुफ़्त टेक्स्ट से ऑडियो</title>
+<style>
+:root{--a:#7c3aed;--b:#db2777;--bg:#faf7ff;--c:#1f1633}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,"Noto Sans Devanagari",sans-serif;background:var(--bg);color:var(--c)}
+header{background:linear-gradient(120deg,var(--a),var(--b));color:#fff;padding:22px 16px 18px;text-align:center}
+header h1{margin:0;font-size:26px}header p{margin:6px 0 0;opacity:.9;font-size:14px}
+main{max-width:760px;margin:0 auto;padding:14px}
+.tabs{display:flex;gap:8px;margin:6px 0 12px}.tabs button{flex:1;padding:11px 6px;border:0;border-radius:12px;background:#ece6fb;font-size:15px;font-weight:600;color:var(--c)}
+.tabs button.on{background:var(--a);color:#fff}
+.card{background:#fff;border-radius:16px;padding:14px;box-shadow:0 2px 10px #7c3aed18;margin-bottom:12px}
+textarea{width:100%;min-height:170px;border:1px solid #ddd;border-radius:12px;padding:12px;font-size:16px;font-family:inherit;resize:vertical}
+label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px}
+select,input[type=file]{width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;font-size:15px;background:#fff}
+.row{display:flex;gap:10px}.row>div{flex:1}
+input[type=range]{width:100%}
+.go{width:100%;padding:14px;margin-top:14px;border:0;border-radius:12px;background:linear-gradient(120deg,var(--a),var(--b));color:#fff;font-size:17px;font-weight:700}
+.go:disabled{opacity:.5}
+.small{font-size:12px;color:#6b6280}.cnt{text-align:right;font-size:12px;color:#6b6280}
+audio{width:100%;margin-top:12px}.dl{display:none;margin-top:8px;text-align:center;padding:12px;border-radius:12px;background:#ece6fb;color:var(--a);font-weight:700;text-decoration:none}
+.msg{margin-top:10px;font-size:14px}.err{color:#b91c1c}
+.rec{display:flex;gap:8px;margin-top:6px}.rec button{flex:1;padding:12px;border:0;border-radius:12px;background:#ece6fb;font-weight:700;font-size:15px}
+.rec button.live{background:#dc2626;color:#fff}
+.read{background:#faf7ff;border-left:4px solid var(--a);padding:10px;border-radius:8px;font-size:15px;line-height:1.6}
+</style></head><body>
+<header><h1>🎙️ आवाज़</h1><p>मुफ़्त टेक्स्ट से इंसानी जैसी आवाज़ · 100+ भाषाएँ · MP3 डाउनलोड · सोनू की आवाज़</p></header>
+<main>
+<div class="tabs"><button id="tb1" class="on" onclick="tab(1)">🔊 AI आवाज़ें</button><button id="tb3" onclick="tab(3)">✨ भावपूर्ण</button><button id="tb2" onclick="tab(2)">🧑 सोनू</button></div>
+
+<section id="t1"><div class="card">
+<textarea id="tx" maxlength="5000" placeholder="यहाँ अपना टेक्स्ट लिखें या पेस्ट करें…"></textarea><div class="cnt"><span id="n">0</span> / 5000</div>
+<div class="row"><div><label>भाषा</label><select id="lang"></select></div><div><label>आवाज़</label><select id="voice"></select></div></div>
+<label>रफ़्तार: <span id="rv">0</span>%</label><input type="range" id="rate" min="-50" max="50" value="0">
+<div class="row"><div><label>पिच: <span id="pv">0</span></label><input type="range" id="pitch" min="-30" max="30" value="0"></div>
+<div><label>आवाज़ तेज़: <span id="vv">0</span>%</label><input type="range" id="vol" min="-50" max="50" value="0"></div></div>
+<button class="go" id="g1" onclick="gen()">ऑडियो बनाएँ</button>
+<div class="msg" id="m1"></div><audio id="a1" controls hidden></audio><a class="dl" id="d1" download="awaaz.mp3">⬇️ MP3 डाउनलोड</a>
+</div></section>
+
+<section id="t3" hidden><div class="card">
+<p class="small">Google Gemini की सबसे असली जैसी आवाज़ें: भाव, ठहराव और अंदाज़ के साथ। हिंदी समेत कई भाषाएँ। (मुफ़्त, पर दिन की सीमा है)</p>
+<textarea id="tx3" maxlength="3000" placeholder="यहाँ टेक्स्ट लिखें…"></textarea><div class="cnt"><span id="n3">0</span> / 3000</div>
+<div class="row"><div><label>आवाज़</label><select id="gv"></select></div>
+<div><label>अंदाज़</label><select id="gs"><option value="">सामान्य</option><option value="Read in Hindi like a calm devotional storyteller, with warmth and pauses">कथा/भक्ति</option><option value="Read cheerfully and energetically">खुशी से</option><option value="Read slowly and softly">धीरे, नरमी से</option><option value="Read like a news anchor, clear and confident">न्यूज़ एंकर</option><option value="Read like a teacher explaining to students, clear and friendly">टीचर</option><option value="Read with a sad, emotional tone">भावुक</option></select></div></div>
+<button class="go" id="g3" onclick="gen3()">ऑडियो बनाएँ</button>
+<div class="msg" id="m3"></div><audio id="a3" controls hidden></audio><a class="dl" id="d3" download="awaaz-gemini.wav">⬇️ WAV डाउनलोड</a>
+</div></section>
+<section id="t2" hidden><div class="card">
+<p class="small">सोनू की अपनी असली आवाज़ में हिंदी ऑडियो।</p>
+<textarea id="tx2" maxlength="1500" placeholder="जो सोनू की आवाज़ में बोलना है…"></textarea><div class="cnt"><span id="n2">0</span> / 1500</div>
+<div class="row"><div><label>PIN</label><input id="pin" type="password" inputmode="numeric" placeholder="6 अंकों का PIN"></div>
+<div><label>रफ़्तार</label><select id="cs"><option value="0.9">धीमी</option><option value="1" selected>सामान्य</option><option value="1.1">तेज़</option></select></div></div>
+<button class="go" id="g2" onclick="gen2()">सोनू की आवाज़ में बनाएँ</button>
+<p class="small">मुफ़्त सर्वर पर बनता है, एक पैराग्राफ़ में 4–8 मिनट लगते हैं। पेज खुला रखें। सिर्फ़ PIN वाला ही इस्तेमाल कर सकता है।</p>
+<div class="msg" id="m2"></div><audio id="a2" controls hidden></audio><a class="dl" id="d2" download="sonu-awaaz.mp3">⬇️ MP3 डाउनलोड</a>
+</div></section>
+</main>
+<script>
+const API="https://sonu-awaaz.vercel.app/api";
+const J=o=>({method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)});
+const $=i=>document.getElementById(i);
+function tab(n){[1,2,3].forEach(i=>{$('t'+i).hidden=n!=i;$('tb'+i).className=n==i?'on':''})}
+$('tx').oninput=()=>$('n').textContent=$('tx').value.length;$('tx2').oninput=()=>$('n2').textContent=$('tx2').value.length;
+['rate','pitch','vol'].forEach((k,i)=>$(k).oninput=()=>$(['rv','pv','vv'][i]).textContent=$(k).value);
+const LN={hi:'हिंदी',en:'English',bn:'বাংলা',ta:'தமிழ்',te:'తెలుగు',mr:'मराठी',gu:'ગુજરાતી',kn:'ಕನ್ನಡ',ml:'മലയാളം',ur:'اردو',pa:'ਪੰਜਾਬੀ',ne:'नेपाली'};
+let V=[];
+async function loadVoices(){try{const r=await fetch(API+'/voices');V=await r.json();
+ const locs=[...new Set(V.map(v=>v.locale))].sort((a,b)=>(a.startsWith('hi')?-1:0)-(b.startsWith('hi')?-1:0)||a.localeCompare(b));
+ const dn=new Intl.DisplayNames(['hi'],{type:'language'});
+ $('lang').innerHTML=locs.map(l=>{let n;try{n=dn.of(l)}catch(e){n=l}return `<option value="${l}">${n} (${l})</option>`}).join('');
+ $('lang').value='hi-IN';fillV()}catch(e){$('m1').innerHTML='<span class="err">सर्वर जाग रहा है, 1 मिनट बाद पेज रीफ़्रेश करें।</span>';setTimeout(loadVoices,20000)}}
+function fillV(){const l=$('lang').value;$('voice').innerHTML=V.filter(v=>v.locale==l).map(v=>`<option value="${v.id}">${v.id.split('-').slice(2).join(' ').replace('Neural','')} · ${v.gender=='Female'?'महिला':'पुरुष'}</option>`).join('')}
+$('lang').onchange=fillV;
+async function gen(){const t=$('tx').value.trim();if(!t){$('m1').textContent='पहले टेक्स्ट लिखें।';return}
+ $('g1').disabled=true;$('m1').textContent='बन रहा है…';
+ try{const r=await fetch(API+'/tts',J({text:t,voice:$('voice').value,rate:$('rate').value,pitch:$('pitch').value,volume:$('vol').value}));if(!r.ok)throw await r.text();const u=URL.createObjectURL(await r.blob());
+ $('a1').src=u;$('a1').hidden=false;$('a1').play();$('d1').href=u;$('d1').style.display='block';$('m1').textContent='✅ तैयार'}
+ catch(e){$('m1').innerHTML='<span class="err">गड़बड़ हुई, दोबारा दबाएँ।</span>'}$('g1').disabled=false}
+async function gen2(){const t=$('tx2').value.trim(),pin=$('pin').value.trim();if(!t){$('m2').textContent='पहले टेक्स्ट लिखें।';return}if(!pin){$('m2').textContent='PIN डालें।';return}
+ localStorage.pin=pin;$('g2').disabled=true;let sec=0;const iv=setInterval(()=>$('m2').textContent=`सोनू की आवाज़ बन रही है… ${Math.floor(++sec/60)} मिनट ${sec%60} सेकंड`,1000);
+ try{let r=await fetch(API+'/sonu',J({text:t,pin,speed:$('cs').value}));if(!r.ok)throw (await r.json()).error;const id=(await r.json()).id;
+ for(let i=0;i<120;i++){await new Promise(z=>setTimeout(z,15000));r=await fetch(API+'/sonuget',J({id,pin}));if(r.status==200)break;if(r.status!=202)throw 'सर्वर गड़बड़'}
+ if(r.status!=200)throw 'समय ज़्यादा लगा';const u=URL.createObjectURL(await r.blob());
+ $('a2').src=u;$('a2').hidden=false;$('a2').play();$('d2').href=u;$('d2').style.display='block';clearInterval(iv);$('m2').textContent='✅ तैयार'}
+ catch(e){clearInterval(iv);$('m2').innerHTML='<span class="err">'+(typeof e=='string'?e:'गड़बड़ हुई')+', दोबारा दबाएँ।</span>'}$('g2').disabled=false}
+$('pin').value=localStorage.pin||'';
+const GV={Kore:'महिला, मज़बूत',Puck:'पुरुष, जोशीला',Charon:'पुरुष, गहरा',Zephyr:'महिला, चमकदार',Fenrir:'पुरुष, उत्साही',Leda:'महिला, युवा',Orus:'पुरुष, दृढ़',Aoede:'महिला, हल्की',Achird:'पुरुष, दोस्ताना',Sulafat:'महिला, गर्मजोशी',Algieba:'पुरुष, नरम',Despina:'महिला, मधुर',Iapetus:'पुरुष, साफ़',Gacrux:'महिला, परिपक्व',Schedar:'पुरुष, संतुलित',Vindemiatrix:'महिला, शांत',Enceladus:'पुरुष, धीमा',Autonoe:'महिला, साफ़',Umbriel:'पुरुष, सहज',Achernar:'महिला, कोमल',Alnilam:'पुरुष, दमदार',Rasalgethi:'पुरुष, जानकार',Callirrhoe:'महिला, सहज',Erinome:'महिला, स्पष्ट',Algenib:'पुरुष, भारी',Laomedeia:'महिला, उत्साही',Pulcherrima:'महिला, आगे',Zubenelgenubi:'पुरुष, आम',Sadachbia:'पुरुष, जीवंत',Sadaltager:'पुरुष, ज्ञानी'};
+$('gv').innerHTML=Object.entries(GV).map(([k,v])=>`<option value="${k}">${k} · ${v}</option>`).join('');
+$('tx3').oninput=()=>$('n3').textContent=$('tx3').value.length;
+async function gen3(){const t=$('tx3').value.trim();if(!t){$('m3').textContent='पहले टेक्स्ट लिखें।';return}
+ $('g3').disabled=true;$('m3').textContent='बन रहा है… (10–40 सेकंड)';
+ try{const r=await fetch(API+'/gemini',J({text:t,voice:$('gv').value,style:$('gs').value}));if(!r.ok)throw await r.text();const u=URL.createObjectURL(await r.blob());
+ $('a3').src=u;$('a3').hidden=false;$('a3').play();$('d3').href=u;$('d3').style.display='block';$('m3').textContent='✅ तैयार'}
+ catch(e){$('m3').innerHTML='<span class="err">आज की मुफ़्त सीमा पूरी या सर्वर व्यस्त। "AI आवाज़ें" टैब इस्तेमाल करें या थोड़ी देर बाद।</span>'}$('g3').disabled=false}
+loadVoices();
+</script></body></html>
