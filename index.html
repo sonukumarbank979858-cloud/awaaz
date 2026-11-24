@@ -22,12 +22,18 @@ audio{width:100%;margin-top:12px}.dl{display:none;margin-top:8px;text-align:cent
 .rec{display:flex;gap:8px;margin-top:6px}.rec button{flex:1;padding:12px;border:0;border-radius:12px;background:#ece6fb;font-weight:700;font-size:15px}
 .rec button.live{background:#dc2626;color:#fff}
 .read{background:#faf7ff;border-left:4px solid var(--a);padding:10px;border-radius:8px;font-size:15px;line-height:1.6}
+.flt{display:flex;gap:6px;margin:4px 0 10px;flex-wrap:wrap}.flt button{padding:8px 12px;border:0;border-radius:20px;background:#ece6fb;font-weight:600}.flt button.on{background:var(--a);color:#fff}
+.vg{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:360px;overflow:auto;padding:2px}
+.vc{border:2px solid #eee;border-radius:12px;padding:8px;display:flex;align-items:center;gap:8px;background:#fff}
+.vc.sel{border-color:var(--a);background:#f5f0ff}.vc .pl{border:0;border-radius:50%;width:38px;height:38px;min-width:38px;background:var(--a);color:#fff;font-size:15px}
+.vc b{font-size:14px;display:block}.vc span{font-size:11px;color:#6b6280}
+.tag{font-size:10px;padding:1px 6px;border-radius:8px;background:#fde7f3;color:var(--b);margin-left:4px}
 </style></head><body>
-<header><h1>🎙️ आवाज़</h1><p>मुफ़्त टेक्स्ट से इंसानी जैसी आवाज़ · 100+ भाषाएँ · MP3 डाउनलोड · सोनू की आवाज़</p></header>
+<header><h1>🎙️ आवाज़</h1><p>47 हिंदी आवाज़ें सुनकर चुनें · 100+ भाषाएँ · डाउनलोड · सोनू की आवाज़</p></header>
 <main>
-<div class="tabs"><button id="tb1" class="on" onclick="tab(1)">🔊 AI आवाज़ें</button><button id="tb3" onclick="tab(3)">✨ भावपूर्ण</button><button id="tb2" onclick="tab(2)">🧑 सोनू</button></div>
+<div class="tabs"><button id="tb3" class="on" onclick="tab(3)">🇮🇳 हिंदी आवाज़ें</button><button id="tb1" onclick="tab(1)">🌍 सभी भाषाएँ</button><button id="tb2" onclick="tab(2)">🧑 सोनू</button></div>
 
-<section id="t1"><div class="card">
+<section id="t1" hidden><div class="card">
 <textarea id="tx" maxlength="5000" placeholder="यहाँ अपना टेक्स्ट लिखें या पेस्ट करें…"></textarea><div class="cnt"><span id="n">0</span> / 5000</div>
 <div class="row"><div><label>भाषा</label><select id="lang"></select></div><div><label>आवाज़</label><select id="voice"></select></div></div>
 <label>रफ़्तार: <span id="rv">0</span>%</label><input type="range" id="rate" min="-50" max="50" value="0">
@@ -37,13 +43,17 @@ audio{width:100%;margin-top:12px}.dl{display:none;margin-top:8px;text-align:cent
 <div class="msg" id="m1"></div><audio id="a1" controls hidden></audio><a class="dl" id="d1" download="awaaz.mp3">⬇️ MP3 डाउनलोड</a>
 </div></section>
 
-<section id="t3" hidden><div class="card">
-<p class="small">Google Gemini की सबसे असली जैसी आवाज़ें: भाव, ठहराव और अंदाज़ के साथ। हिंदी समेत कई भाषाएँ। (मुफ़्त, पर दिन की सीमा है)</p>
-<textarea id="tx3" maxlength="3000" placeholder="यहाँ टेक्स्ट लिखें…"></textarea><div class="cnt"><span id="n3">0</span> / 3000</div>
-<div class="row"><div><label>आवाज़</label><select id="gv"></select></div>
-<div><label>अंदाज़</label><select id="gs"><option value="">सामान्य</option><option value="Read in Hindi like a calm devotional storyteller, with warmth and pauses">कथा/भक्ति</option><option value="Read cheerfully and energetically">खुशी से</option><option value="Read slowly and softly">धीरे, नरमी से</option><option value="Read like a news anchor, clear and confident">न्यूज़ एंकर</option><option value="Read like a teacher explaining to students, clear and friendly">टीचर</option><option value="Read with a sad, emotional tone">भावुक</option></select></div></div>
+<section id="t3"><div class="card">
+<label>1. आवाज़ चुनें (▶ दबाकर सुनें)</label>
+<div class="flt"><button class="on" onclick="fv('all',this)">सभी</button><button onclick="fv('F',this)">👩 महिला</button><button onclick="fv('M',this)">👨 पुरुष</button><button onclick="fv('g',this)">⭐ भावपूर्ण</button><button onclick="fv('e',this)">⚡ असीमित</button></div>
+<div class="vg" id="vg"></div>
+<p class="small">⚡ असीमित = तुरंत और बिना सीमा। ⭐ भावपूर्ण = सबसे इंसानी, पर रोज़ की मुफ़्त सीमा है।</p>
+<label>2. टेक्स्ट लिखें</label>
+<textarea id="tx3" maxlength="3000" placeholder="यहाँ हिंदी टेक्स्ट लिखें या पेस्ट करें…"></textarea><div class="cnt"><span id="n3">0</span> / 3000</div>
+<div id="gopt"><label>अंदाज़ (⭐ आवाज़ों के लिए)</label><select id="gs"><option value="">सामान्य</option><option value="Read in Hindi like a calm devotional storyteller, with warmth and pauses">कथा/भक्ति</option><option value="Read cheerfully and energetically">खुशी से</option><option value="Read slowly and softly">धीरे, नरमी से</option><option value="Read like a news anchor, clear and confident">न्यूज़ एंकर</option><option value="Read like a teacher explaining to students, clear and friendly">टीचर</option><option value="Read with a sad, emotional tone">भावुक</option><option value="Read like an excited YouTuber">यूट्यूबर</option></select></div>
+<div id="eopt"><label>रफ़्तार: <span id="rv3">0</span>%</label><input type="range" id="rate3" min="-40" max="40" value="0"></div>
 <button class="go" id="g3" onclick="gen3()">ऑडियो बनाएँ</button>
-<div class="msg" id="m3"></div><audio id="a3" controls hidden></audio><a class="dl" id="d3" download="awaaz-gemini.wav">⬇️ WAV डाउनलोड</a>
+<div class="msg" id="m3"></div><audio id="a3" controls hidden></audio><a class="dl" id="d3" download="awaaz.mp3">⬇️ डाउनलोड</a>
 </div></section>
 <section id="t2" hidden><div class="card">
 <p class="small">सोनू की अपनी असली आवाज़ में हिंदी ऑडियो।</p>
@@ -84,13 +94,31 @@ async function gen2(){const t=$('tx2').value.trim(),pin=$('pin').value.trim();if
  $('a2').src=u;$('a2').hidden=false;$('a2').play();$('d2').href=u;$('d2').style.display='block';clearInterval(iv);$('m2').textContent='✅ तैयार'}
  catch(e){clearInterval(iv);$('m2').innerHTML='<span class="err">'+(typeof e=='string'?e:'गड़बड़ हुई')+', दोबारा दबाएँ।</span>'}$('g2').disabled=false}
 $('pin').value=localStorage.pin||'';
-const GV={Kore:'महिला, मज़बूत',Puck:'पुरुष, जोशीला',Charon:'पुरुष, गहरा',Zephyr:'महिला, चमकदार',Fenrir:'पुरुष, उत्साही',Leda:'महिला, युवा',Orus:'पुरुष, दृढ़',Aoede:'महिला, हल्की',Achird:'पुरुष, दोस्ताना',Sulafat:'महिला, गर्मजोशी',Algieba:'पुरुष, नरम',Despina:'महिला, मधुर',Iapetus:'पुरुष, साफ़',Gacrux:'महिला, परिपक्व',Schedar:'पुरुष, संतुलित',Vindemiatrix:'महिला, शांत',Enceladus:'पुरुष, धीमा',Autonoe:'महिला, साफ़',Umbriel:'पुरुष, सहज',Achernar:'महिला, कोमल',Alnilam:'पुरुष, दमदार',Rasalgethi:'पुरुष, जानकार',Callirrhoe:'महिला, सहज',Erinome:'महिला, स्पष्ट',Algenib:'पुरुष, भारी',Laomedeia:'महिला, उत्साही',Pulcherrima:'महिला, आगे',Zubenelgenubi:'पुरुष, आम',Sadachbia:'पुरुष, जीवंत',Sadaltager:'पुरुष, ज्ञानी'};
-$('gv').innerHTML=Object.entries(GV).map(([k,v])=>`<option value="${k}">${k} · ${v}</option>`).join('');
-$('tx3').oninput=()=>$('n3').textContent=$('tx3').value.length;
+const HV=[
+['e','hi-IN-SwaraNeural','स्वरा','F','साफ़, मधुर हिंदी'],['e','hi-IN-MadhurNeural','मधुर','M','साफ़, सधी हिंदी'],
+['p','bachchi','पिंकी','F','बच्ची जैसी',{v:'hi-IN-SwaraNeural',p:30,r:8}],['p','ladka','रोहन','M','युवा लड़का',{v:'hi-IN-MadhurNeural',p:14,r:6}],
+['p','kathavachak','पंडित जी','M','गंभीर कथावाचक',{v:'hi-IN-MadhurNeural',p:-6,r:-10}],['p','dadaji','दादाजी','M','बुज़ुर्ग, धीमे',{v:'hi-IN-MadhurNeural',p:-14,r:-18}],
+['p','dadi','दादी माँ','F','बुज़ुर्ग, प्यार भरी',{v:'hi-IN-SwaraNeural',p:-12,r:-18}],
+['e','en-US-AvaMultilingualNeural','अवनि','F','नरम, दोस्ताना'],['e','en-US-EmmaMultilingualNeural','इशा','F','खुशमिज़ाज'],['e','fr-FR-VivienneMultilingualNeural','विनीता','F','शांत, सुरीली'],['e','pt-BR-ThalitaMultilingualNeural','तनु','F','जवान, चंचल'],
+['e','en-US-AndrewMultilingualNeural','आदित्य','M','गर्मजोशी भरी'],['e','en-US-BrianMultilingualNeural','भरत','M','सहज, बातचीत वाली'],['e','en-AU-WilliamMultilingualNeural','विवेक','M','गहरी'],['e','fr-FR-RemyMultilingualNeural','रवि','M','नरम'],['e','it-IT-GiuseppeMultilingualNeural','गौरव','M','दमदार'],['e','ko-KR-HyunsuMultilingualNeural','हर्ष','M','युवा'],
+['g','Kore','कोमल','F','मज़बूत, भरोसेमंद'],['g','Zephyr','ज़ोया','F','चमकदार'],['g','Leda','लता','F','युवा'],['g','Aoede','आरती','F','हल्की, सुकूनभरी'],['g','Callirrhoe','काव्या','F','सहज'],['g','Autonoe','अनु','F','साफ़'],['g','Despina','दीपा','F','मधुर'],['g','Erinome','ऋतु','F','स्पष्ट'],['g','Laomedeia','लावण्या','F','उत्साही'],['g','Achernar','अर्चना','F','कोमल'],['g','Gacrux','गायत्री','F','परिपक्व'],['g','Pulcherrima','पल्लवी','F','आत्मविश्वासी'],['g','Vindemiatrix','वंदना','F','शांत'],['g','Sulafat','सुलोचना','F','गर्मजोशी भरी'],
+['g','Puck','प्रकाश','M','जोशीला'],['g','Charon','चिराग','M','गहरी, जानकार'],['g','Fenrir','फ़रहान','M','उत्साही'],['g','Orus','ओम','M','दृढ़'],['g','Enceladus','ईशान','M','धीमी, साँसभरी'],['g','Iapetus','इंदर','M','साफ़'],['g','Umbriel','उमेश','M','सहज'],['g','Algieba','अजय','M','नरम'],['g','Algenib','अर्जुन','M','भारी'],['g','Rasalgethi','राजेश','M','ज्ञानी'],['g','Alnilam','अनिल','M','दमदार'],['g','Schedar','शेखर','M','संतुलित'],['g','Achird','अमित','M','दोस्ताना'],['g','Zubenelgenubi','ज़ुबैर','M','आम बोलचाल'],['g','Sadachbia','सचिन','M','जीवंत'],['g','Sadaltager','सागर','M','समझदार']];
+let SEL=HV[0],F='all';const PA=new Audio();
+function smp(v){return 'samples/'+(v[0]=='g'?'g_':v[0]=='p'?'p_':'e_')+v[1]+'.mp3'}
+function drawV(){$('vg').innerHTML=HV.map((v,i)=>[v,i]).filter(([v])=>F=='all'||v[3]==F||(F=='g'&&v[0]=='g')||(F=='e'&&v[0]!='g')).map(([v,i])=>`<div class="vc ${v==SEL?'sel':''}" onclick="pick(${i})"><button class="pl" onclick="event.stopPropagation();pv(${i})">▶</button><div><b>${v[2]} ${v[3]=='F'?'👩':'👨'}${v[0]=='g'?'<i class=tag>⭐</i>':''}</b><span>${v[4]}</span></div></div>`).join('');
+ $('gopt').style.display=SEL[0]=='g'?'':'none';$('eopt').style.display=SEL[0]=='g'?'none':''}
+function fv(f,b){F=f;document.querySelectorAll('.flt button').forEach(x=>x.className='');b.className='on';drawV()}
+function pick(i){SEL=HV[i];drawV()}
+function pv(i){PA.src=smp(HV[i]);PA.play();pick(i)}
+$('rate3').oninput=()=>$('rv3').textContent=$('rate3').value;
+$('tx3').oninput=()=>$('n3').textContent=$('tx3').value.length;drawV();
 async function gen3(){const t=$('tx3').value.trim();if(!t){$('m3').textContent='पहले टेक्स्ट लिखें।';return}
- $('g3').disabled=true;$('m3').textContent='बन रहा है… (10–40 सेकंड)';
- try{const r=await fetch(API+'/gemini',J({text:t,voice:$('gv').value,style:$('gs').value}));if(!r.ok)throw await r.text();const u=URL.createObjectURL(await r.blob());
+ $('g3').disabled=true;$('m3').textContent=SEL[0]=='g'?'बन रहा है… (10–40 सेकंड)':'बन रहा है…';
+ try{let r;
+ if(SEL[0]=='g'){r=await fetch(API+'/gemini',J({text:t,voice:SEL[1],style:$('gs').value}));$('d3').download='awaaz-'+SEL[1]+'.wav'}
+ else{const o=SEL[0]=='p'?SEL[5]:{v:SEL[1],p:0,r:0};r=await fetch(API+'/tts',J({text:t,voice:o.v,pitch:o.p,rate:(+o.r)+(+$('rate3').value)}));$('d3').download='awaaz.mp3'}
+ if(!r.ok)throw 0;const u=URL.createObjectURL(await r.blob());
  $('a3').src=u;$('a3').hidden=false;$('a3').play();$('d3').href=u;$('d3').style.display='block';$('m3').textContent='✅ तैयार'}
- catch(e){$('m3').innerHTML='<span class="err">आज की मुफ़्त सीमा पूरी या सर्वर व्यस्त। "AI आवाज़ें" टैब इस्तेमाल करें या थोड़ी देर बाद।</span>'}$('g3').disabled=false}
+ catch(e){$('m3').innerHTML='<span class="err">'+(SEL[0]=='g'?'आज की ⭐ मुफ़्त सीमा पूरी या सर्वर व्यस्त। कोई ⚡ आवाज़ चुनें।':'गड़बड़ हुई, दोबारा दबाएँ।')+'</span>'}$('g3').disabled=false}
 loadVoices();
 </script></body></html>
