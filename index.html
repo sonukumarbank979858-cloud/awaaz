@@ -54,7 +54,7 @@ audio{width:100%;margin-top:12px}.dl{display:none;margin-top:8px;text-align:cent
 </div></section>
 
 <section id="t3"><div class="card">
-<textarea id="tx3" maxlength="3000" placeholder="यहाँ टेक्स्ट लिखें या पेस्ट करें…"></textarea><div class="cnt"><a href="#" onclick="$('tx3').value='';$('n3').textContent=0;return false" style="float:left;color:#b91c1c">✖ मिटाएँ</a><span id="n3">0</span> / 3000</div>
+<textarea id="tx3" maxlength="10000" placeholder="यहाँ टेक्स्ट लिखें या पेस्ट करें…"></textarea><div class="cnt"><a href="#" onclick="$('tx3').value='';$('n3').textContent=0;return false" style="float:left;color:#b91c1c">✖ मिटाएँ</a><span id="n3">0</span> / 10000</div>
 <label>भाषा</label><select id="lg3"></select>
 <label>आवाज़ · <span id="vcount"></span></label>
 <div class="vsel"><button type="button" class="vbtn" id="vbtn" onclick="tgV()"><span id="vcur"></span><span class="car">⌄</span></button>
@@ -62,7 +62,7 @@ audio{width:100%;margin-top:12px}.dl{display:none;margin-top:8px;text-align:cent
 <div class="flt"><button class="on" onclick="fv('all',this)">सभी</button><button onclick="fv('F',this)">👩 महिला</button><button onclick="fv('M',this)">👨 पुरुष</button><button onclick="fv('g',this)">⭐ भावपूर्ण</button><button onclick="fv('e',this)">⚡ असीमित</button><button onclick="fv('m',this)">🌐 बहुभाषी</button></div>
 <div class="vg" id="vg"></div></div></div>
 <details class="set"><summary>⚙️ आवाज़ सेटिंग</summary><div id="gopt"><label>अंदाज़ (⭐ आवाज़ों के लिए)</label><select id="gs"><option value="">सामान्य</option><option value="Read in Hindi like a calm devotional storyteller, with warmth and pauses">कथा/भक्ति</option><option value="Read cheerfully and energetically">खुशी से</option><option value="Read slowly and softly">धीरे, नरमी से</option><option value="Read like a news anchor, clear and confident">न्यूज़ एंकर</option><option value="Read like a teacher explaining to students, clear and friendly">टीचर</option><option value="Read with a sad, emotional tone">भावुक</option><option value="Read like an excited YouTuber">यूट्यूबर</option></select></div><div id="eopt"><div class="row"><div><label>रफ़्तार: <span id="rv3">0</span>%</label><input type="range" id="rate3" min="-50" max="50" value="0"></div><div><label>पिच: <span id="pv3">0</span></label><input type="range" id="pitch3" min="-30" max="30" value="0"></div></div><label>आवाज़ तेज़: <span id="vv3">0</span>%</label><input type="range" id="vol3" min="-50" max="50" value="0"></div></details>
-<p class="small">⚡ असीमित = तुरंत, बिना सीमा · ⭐ भावपूर्ण = सबसे इंसानी, रोज़ की मुफ़्त सीमा · 3,000 अक्षर प्रति बार</p>
+<p class="small">⚡ असीमित = तुरंत, बिना सीमा · ⭐ भावपूर्ण = सबसे इंसानी, रोज़ की मुफ़्त सीमा · 10,000 अक्षर प्रति बार</p>
 <button class="go" id="g3" onclick="gen3()">ऑडियो बनाएँ</button>
 <div class="msg" id="m3"></div><audio id="a3" controls hidden></audio><a class="dl" id="d3" download="awaaz.mp3">⬇️ डाउनलोड</a>
 </div></section>
@@ -152,13 +152,18 @@ async function init3(){try{EV=await (await fetch(API+'/voices')).json()}catch(e)
 $('lg3').onchange=()=>{L3=$('lg3').value;SEL=null;drawV();$('vpop').hidden=false};
 $('rate3').oninput=()=>$('rv3').textContent=$('rate3').value;$('pitch3').oninput=()=>$('pv3').textContent=$('pitch3').value;$('vol3').oninput=()=>$('vv3').textContent=$('vol3').value;
 $('tx3').oninput=()=>$('n3').textContent=$('tx3').value.length;init3();
+function chunks(t,n){const out=[];let cur='';for(const p of t.split(/(?<=[।.!?\n])\s*/)){if((cur+' '+p).length>n&&cur){out.push(cur);cur=''}if(p.length>n){for(let i=0;i<p.length;i+=n)out.push(p.slice(i,i+n))}else cur=cur?cur+' '+p:p}if(cur)out.push(cur);return out}
+function joinWav(bufs){const pcm=bufs.map(b=>new Uint8Array(b).slice(44));const len=pcm.reduce((a,b)=>a+b.length,0);const h=new Uint8Array(bufs[0].slice(0,44));const dv=new DataView(h.buffer);dv.setUint32(4,36+len,true);dv.setUint32(40,len,true);return new Blob([h,...pcm],{type:'audio/wav'})}
 async function gen3(){const t=$('tx3').value.trim();if(!t){$('m3').textContent='पहले टेक्स्ट लिखें।';return}
- $('a3').pause();$('a3').hidden=true;$('d3').style.display='none';$('g3').disabled=true;$('m3').textContent=SEL[0]=='g'?'बन रहा है… (10–40 सेकंड)':'बन रहा है…';
- let FB=0;try{let r;
- if(SEL[0]=='g'){r=await fetch(API+'/gemini',J({text:t,voice:SEL[1],style:$('gs').value}));$('d3').download='awaaz-'+SEL[1]+'.wav';if(!r.ok){FB=1;const fv=L3.startsWith('hi')?(SEL[3]=='F'?'hi-IN-SwaraNeural':'hi-IN-MadhurNeural'):(SEL[3]=='F'?'en-US-AvaMultilingualNeural':'en-US-AndrewMultilingualNeural');r=await fetch(API+'/tts',J({text:t,voice:fv}));$('d3').download='awaaz.mp3'}}
- else{const o=SEL[0]=='p'?SEL[5]:{v:SEL[1],p:0,r:0};r=await fetch(API+'/tts',J({text:t,voice:o.v,pitch:(+o.p)+(+$('pitch3').value),rate:(+o.r)+(+$('rate3').value),volume:$('vol3').value}));$('d3').download='awaaz.mp3'}
- if(!r.ok)throw 0;const u=URL.createObjectURL(await r.blob());
- $('a3').src=u;$('a3').hidden=false;$('a3').play();$('d3').href=u;$('d3').style.display='block';$('m3').textContent=FB?'✅ तैयार (⭐ की आज की सीमा पूरी, ⚡ आवाज़ से बनाया)':'✅ तैयार'}
- catch(e){$('m3').innerHTML='<span class="err">'+(SEL[0]=='g'?'आज की ⭐ मुफ़्त सीमा पूरी या सर्वर व्यस्त। कोई ⚡ आवाज़ चुनें।':'गड़बड़ हुई, दोबारा दबाएँ।')+'</span>'}$('g3').disabled=false}
+ $('a3').pause();$('a3').hidden=true;$('d3').style.display='none';$('g3').disabled=true;
+ const isG=SEL[0]=='g',parts=chunks(t,isG?900:1400);let FB=0;const bufs=[];
+ try{for(let k=0;k<parts.length;k++){$('m3').textContent='बन रहा है… '+(parts.length>1?'(भाग '+(k+1)+'/'+parts.length+') ':'')+(isG?'⭐ में थोड़ा समय लगता है':'');let r;
+  if(isG&&!FB){r=await fetch(API+'/gemini',J({text:parts[k],voice:SEL[1],style:$('gs').value}));if(!r.ok&&k==0)FB=1;else if(!r.ok)throw 0}
+  if(!isG||FB){let o;if(SEL[0]=='p')o=SEL[5];else if(isG)o={v:L3.startsWith('hi')?(SEL[3]=='F'?'hi-IN-SwaraNeural':'hi-IN-MadhurNeural'):(SEL[3]=='F'?'en-US-AvaMultilingualNeural':'en-US-AndrewMultilingualNeural'),p:0,r:0};else o={v:SEL[1],p:0,r:0};
+   r=await fetch(API+'/tts',J({text:parts[k],voice:o.v,pitch:(+o.p)+(+$('pitch3').value),rate:(+o.r)+(+$('rate3').value),volume:$('vol3').value}))}
+  if(!r.ok)throw 0;bufs.push(await r.arrayBuffer())}
+  const wav=isG&&!FB;const blob=wav?joinWav(bufs):new Blob(bufs,{type:'audio/mpeg'});$('d3').download=wav?'awaaz-'+SEL[1]+'.wav':'awaaz.mp3';
+  const u=URL.createObjectURL(blob);$('a3').src=u;$('a3').hidden=false;$('a3').play();$('d3').href=u;$('d3').style.display='block';$('m3').textContent=FB?'✅ तैयार (⭐ की आज की सीमा पूरी, ⚡ आवाज़ से बनाया)':'✅ तैयार'}
+ catch(e){$('m3').innerHTML='<span class="err">गड़बड़ हुई या सर्वर व्यस्त, दोबारा दबाएँ।</span>'}$('g3').disabled=false}
 loadVoices();
 </script></body></html>
